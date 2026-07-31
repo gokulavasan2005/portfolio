@@ -112,9 +112,56 @@
 
   .hero-canvas-wrap{
     position:relative; height:520px;
+    display:flex; align-items:center; justify-content:center;
   }
-  #hero-canvas{width:100%; height:100%; display:block; cursor:grab;}
-  #hero-canvas:active{cursor:grabbing;}
+  .scene3d{
+    width:100%; height:100%;
+    display:flex; align-items:center; justify-content:center;
+    perspective:1100px;
+    cursor:grab;
+  }
+  .scene3d:active{cursor:grabbing;}
+  .globe{
+    position:relative; width:280px; height:280px;
+    transform-style:preserve-3d;
+    transform:rotateX(-18deg) rotateY(0deg);
+    animation:autospin 22s linear infinite;
+  }
+  .scene3d.dragging .globe{animation:none;}
+  @keyframes autospin{ from{transform:rotateX(-18deg) rotateY(0deg);} to{transform:rotateX(-18deg) rotateY(360deg);} }
+  .ring{
+    position:absolute; inset:0;
+    border:1px solid var(--green);
+    border-radius:50%;
+    opacity:0.45;
+    box-shadow:0 0 18px rgba(57,255,20,0.18) inset, 0 0 18px rgba(57,255,20,0.12);
+  }
+  .r1{transform:rotateY(0deg);}
+  .r2{transform:rotateY(30deg);}
+  .r3{transform:rotateY(60deg);}
+  .r4{transform:rotateY(90deg); opacity:0.65;}
+  .r5{transform:rotateX(90deg);}
+  .r6{transform:rotateX(60deg) rotateY(45deg); opacity:0.3;}
+  .core{
+    position:absolute; inset:0; margin:auto;
+    width:64px; height:64px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, rgba(57,255,20,0.9), rgba(57,255,20,0.05) 70%);
+    box-shadow:0 0 60px 10px rgba(57,255,20,0.35);
+    transform:translateZ(0px);
+  }
+  .node{
+    position:absolute; width:8px; height:8px; border-radius:50%;
+    background:var(--green); box-shadow:0 0 12px 3px var(--green-glow);
+    top:50%; left:50%; margin:-4px;
+  }
+  .n1{transform:translateZ(140px);}
+  .n2{transform:rotateY(90deg) translateZ(140px);}
+  .n3{transform:rotateY(180deg) translateZ(140px);}
+  .n4{transform:rotateY(270deg) translateZ(140px);}
+  .n5{transform:rotateX(90deg) translateZ(140px);}
+  .n6{transform:rotateX(-90deg) translateZ(140px);}
+  .n7{transform:rotateY(45deg) rotateX(35deg) translateZ(140px);}
+  .n8{transform:rotateY(-135deg) rotateX(-35deg) translateZ(140px);}
   .canvas-hint{
     position:absolute; bottom:6px; left:50%; transform:translateX(-50%);
     font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--text-faint);
@@ -251,8 +298,26 @@
         <a class="btn-ghost" href="#contact">Contact me</a>
       </div>
     </div>
-    <div class="hero-canvas-wrap">
-      <canvas id="hero-canvas"></canvas>
+    <div class="hero-canvas-wrap" id="scene-wrap">
+      <div class="scene3d" id="scene3d">
+        <div class="globe" id="globe">
+          <div class="ring r1"></div>
+          <div class="ring r2"></div>
+          <div class="ring r3"></div>
+          <div class="ring r4"></div>
+          <div class="ring r5"></div>
+          <div class="ring r6"></div>
+          <div class="node n1"></div>
+          <div class="node n2"></div>
+          <div class="node n3"></div>
+          <div class="node n4"></div>
+          <div class="node n5"></div>
+          <div class="node n6"></div>
+          <div class="node n7"></div>
+          <div class="node n8"></div>
+          <div class="core"></div>
+        </div>
+      </div>
       <div class="canvas-hint">drag to rotate</div>
     </div>
   </div>
@@ -376,7 +441,6 @@
   <span>Built with intent, not a template.</span>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
   // ---- Typing role line ----
   const roles = ["Frontend Developer", "Full-Stack Web Developer", "React & Next.js Engineer", "TinyML / Edge AI Explorer"];
@@ -396,68 +460,32 @@
   }
   typeLoop();
 
-  // ---- 3D Hero: wireframe network sphere ----
+  // ---- 3D Hero: pure CSS/JS wireframe globe (no external deps) ----
   (function(){
-    const canvas = document.getElementById('hero-canvas');
-    const wrap = canvas.parentElement;
-    const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-    camera.position.z = 6.2;
-
-    function resize(){
-      const w = wrap.clientWidth, h = wrap.clientHeight;
-      renderer.setSize(w, h);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      camera.aspect = w/h; camera.updateProjectionMatrix();
-    }
-    resize();
-    window.addEventListener('resize', resize);
-
-    const group = new THREE.Group();
-    scene.add(group);
-
-    // icosahedron wireframe (node network)
-    const geo = new THREE.IcosahedronGeometry(2.3, 2);
-    const wireMat = new THREE.MeshBasicMaterial({color:0x39FF14, wireframe:true, transparent:true, opacity:0.35});
-    const wireMesh = new THREE.Mesh(geo, wireMat);
-    group.add(wireMesh);
-
-    // glowing points at vertices
-    const ptsMat = new THREE.PointsMaterial({color:0x39FF14, size:0.055, transparent:true, opacity:0.95});
-    const points = new THREE.Points(geo, ptsMat);
-    group.add(points);
-
-    // inner core sphere, subtle
-    const coreGeo = new THREE.IcosahedronGeometry(1.1, 1);
-    const coreMat = new THREE.MeshBasicMaterial({color:0x39FF14, wireframe:true, transparent:true, opacity:0.18});
-    group.add(new THREE.Mesh(coreGeo, coreMat));
-
-    let targetRotX = 0, targetRotY = 0;
+    const scene = document.getElementById('scene3d');
+    const globe = document.getElementById('globe');
+    let rotY = 0, rotX = -18;
     let dragging = false, lastX = 0, lastY = 0;
-    let autoRotate = true;
 
-    canvas.addEventListener('pointerdown', e => { dragging = true; autoRotate = false; lastX = e.clientX; lastY = e.clientY; });
-    window.addEventListener('pointerup', () => dragging = false);
-    window.addEventListener('pointermove', e => {
-      if(dragging){
-        targetRotY += (e.clientX - lastX) * 0.006;
-        targetRotX += (e.clientY - lastY) * 0.006;
-        lastX = e.clientX; lastY = e.clientY;
-      }
-    });
-
-    function animate(){
-      requestAnimationFrame(animate);
-      if(autoRotate){
-        targetRotY += 0.0018;
-        targetRotX = Math.sin(Date.now()*0.0002) * 0.15;
-      }
-      group.rotation.y += (targetRotY - group.rotation.y) * 0.08;
-      group.rotation.x += (targetRotX - group.rotation.x) * 0.08;
-      renderer.render(scene, camera);
+    function applyTransform(){
+      globe.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
     }
-    animate();
+
+    scene.addEventListener('pointerdown', e => {
+      dragging = true;
+      scene.classList.add('dragging');
+      lastX = e.clientX; lastY = e.clientY;
+    });
+    window.addEventListener('pointerup', () => { dragging = false; });
+    window.addEventListener('pointermove', e => {
+      if(!dragging) return;
+      rotY += (e.clientX - lastX) * 0.4;
+      rotX -= (e.clientY - lastY) * 0.4;
+      rotX = Math.max(-80, Math.min(80, rotX));
+      lastX = e.clientX; lastY = e.clientY;
+      applyTransform();
+    });
+    applyTransform();
   })();
 
   // ---- Subtle 3D tilt on project cards ----
