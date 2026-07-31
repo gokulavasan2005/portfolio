@@ -1,92 +1,477 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Professional Portfolio">
-    <title>Your Name - Portfolio</title>
-    <link rel="stylesheet" href="style.css">
-    
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gokulavasan J — Full-Stack Web Developer</title>
+<meta name="description" content="Portfolio of Gokulavasan J — Frontend / Full-Stack Web Developer building with Next.js, React, Node.js and MySQL." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#05070a;
+    --surface:#0b120e;
+    --surface-2:#0f1712;
+    --line:#1b2b21;
+    --green:#39FF14;
+    --green-dim:#1f9e0d;
+    --green-glow: rgba(57,255,20,0.35);
+    --text:#e7f5e2;
+    --text-muted:#8ba888;
+    --text-faint:#5a7059;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--void);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--green); color:#05070a;}
+  a{color:inherit; text-decoration:none;}
+
+  .noise{
+    position:fixed; inset:0; pointer-events:none; z-index:2;
+    opacity:0.035;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---- Nav ---- */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 6vw;
+    background:rgba(5,7,10,0.7);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .logo{
+    font-family:'JetBrains Mono', monospace;
+    font-weight:600; font-size:15px; letter-spacing:0.5px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .logo .dot{width:7px;height:7px;border-radius:50%;background:var(--green); box-shadow:0 0 10px var(--green-glow);}
+  .nav-links{display:flex; gap:36px; font-family:'JetBrains Mono', monospace; font-size:13px; color:var(--text-muted);}
+  .nav-links a{position:relative; padding:4px 0; transition:color 0.25s;}
+  .nav-links a:hover{color:var(--green);}
+  .nav-links a::before{content:"// ";color:var(--text-faint);}
+  .nav-cta{
+    font-family:'JetBrains Mono', monospace; font-size:13px;
+    border:1px solid var(--green-dim); color:var(--green);
+    padding:8px 16px; border-radius:999px; transition:all 0.25s;
+  }
+  .nav-cta:hover{background:var(--green); color:#05070a; box-shadow:0 0 24px var(--green-glow);}
+  .nav-toggle{display:none;}
+
+  /* ---- Hero ---- */
+  .hero{
+    min-height:100vh;
+    display:flex; align-items:center;
+    padding:120px 6vw 60px;
+    position:relative;
+  }
+  .hero-grid{
+    display:grid; grid-template-columns:1.1fr 0.9fr; gap:40px; align-items:center;
+    width:100%; max-width:1300px; margin:0 auto; position:relative; z-index:3;
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace; font-size:13px; color:var(--green);
+    display:flex; align-items:center; gap:10px; margin-bottom:22px;
+  }
+  .eyebrow::before{content:""; width:22px; height:1px; background:var(--green);}
+  h1.name{
+    font-family:'Space Grotesk', sans-serif; font-weight:700;
+    font-size:clamp(42px, 6vw, 78px); line-height:1.02; margin:0 0 18px;
+    letter-spacing:-0.02em;
+  }
+  h1.name span{color:var(--green);}
+  .role-line{
+    font-family:'JetBrains Mono', monospace; font-size:clamp(15px,1.6vw,19px);
+    color:var(--text-muted); margin-bottom:26px; min-height:28px;
+  }
+  .role-line .cursor{display:inline-block; width:9px; background:var(--green); margin-left:2px; animation:blink 1s step-end infinite;}
+  @keyframes blink{50%{opacity:0;}}
+  .hero-desc{
+    max-width:520px; color:var(--text-muted); font-size:16px; line-height:1.7; margin-bottom:36px;
+  }
+  .hero-actions{display:flex; gap:16px; flex-wrap:wrap;}
+  .btn-primary, .btn-ghost{
+    font-family:'JetBrains Mono', monospace; font-size:14px;
+    padding:14px 26px; border-radius:10px; display:inline-flex; align-items:center; gap:8px;
+    transition:all 0.25s;
+  }
+  .btn-primary{background:var(--green); color:#05070a; font-weight:600;}
+  .btn-primary:hover{box-shadow:0 0 30px var(--green-glow); transform:translateY(-2px);}
+  .btn-ghost{border:1px solid var(--line); color:var(--text);}
+  .btn-ghost:hover{border-color:var(--green-dim); color:var(--green);}
+
+  .hero-canvas-wrap{
+    position:relative; height:520px;
+  }
+  #hero-canvas{width:100%; height:100%; display:block; cursor:grab;}
+  #hero-canvas:active{cursor:grabbing;}
+  .canvas-hint{
+    position:absolute; bottom:6px; left:50%; transform:translateX(-50%);
+    font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--text-faint);
+    letter-spacing:0.5px;
+  }
+
+  .scroll-cue{
+    position:absolute; bottom:36px; left:6vw; z-index:3;
+    font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--text-faint);
+    display:flex; align-items:center; gap:10px;
+  }
+  .scroll-cue .line{width:1px; height:34px; background:linear-gradient(var(--green), transparent); animation:pulse 2s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:0.3;}50%{opacity:1;}}
+
+  /* ---- Section shell ---- */
+  section{padding:120px 6vw; max-width:1300px; margin:0 auto; position:relative;}
+  .section-tag{
+    font-family:'JetBrains Mono', monospace; font-size:13px; color:var(--green);
+    margin-bottom:14px; display:flex; align-items:center; gap:10px;
+  }
+  .section-tag::before{content:""; width:22px; height:1px; background:var(--green);}
+  .section-title{
+    font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:clamp(28px,3.4vw,42px);
+    margin:0 0 50px; max-width:700px; letter-spacing:-0.01em;
+  }
+
+  /* ---- About ---- */
+  .about-grid{display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:start;}
+  .about-text p{color:var(--text-muted); font-size:16px; line-height:1.8; margin:0 0 18px;}
+  .status-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    padding:22px 24px; font-family:'JetBrains Mono', monospace; font-size:13px; color:var(--text-muted);
+    margin-top:8px;
+  }
+  .status-card .row{display:flex; gap:12px; padding:7px 0; border-bottom:1px dashed var(--line);}
+  .status-card .row:last-child{border-bottom:none;}
+  .status-card .k{color:var(--green); width:110px; flex-shrink:0;}
+
+  .stack{display:flex; flex-direction:column; gap:14px;}
+  .stack-layer{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    padding:20px 22px; position:relative; overflow:hidden;
+  }
+  .stack-layer::before{
+    content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--green);
+    opacity:0.7;
+  }
+  .stack-layer .layer-label{
+    font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--text-faint);
+    text-transform:uppercase; letter-spacing:1.5px; margin-bottom:10px;
+  }
+  .stack-layer .layer-items{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{
+    font-family:'JetBrains Mono', monospace; font-size:13px; color:var(--text);
+    background:var(--surface-2); border:1px solid var(--line); border-radius:7px; padding:6px 12px;
+  }
+
+  /* ---- Projects ---- */
+  .projects-list{display:flex; flex-direction:column; gap:22px;}
+  .project-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    padding:36px; display:grid; grid-template-columns:auto 1fr auto; gap:28px; align-items:start;
+    transition:transform 0.4s cubic-bezier(.2,.8,.2,1), border-color 0.3s;
+    transform-style:preserve-3d;
+    will-change:transform;
+  }
+  .project-card:hover{border-color:var(--green-dim);}
+  .project-index{font-family:'JetBrains Mono', monospace; color:var(--green); font-size:14px; padding-top:4px;}
+  .project-main h3{font-family:'Space Grotesk',sans-serif; font-size:22px; margin:0 0 10px; font-weight:600;}
+  .project-main p{color:var(--text-muted); font-size:15px; line-height:1.7; margin:0 0 16px; max-width:640px;}
+  .project-tags{display:flex; flex-wrap:wrap; gap:8px;}
+  .tag{font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--green); background:rgba(57,255,20,0.08); border:1px solid rgba(57,255,20,0.25); border-radius:6px; padding:4px 10px;}
+  .project-status{font-family:'JetBrains Mono', monospace; font-size:12px; text-align:right;}
+  .project-status a{color:var(--green); border-bottom:1px solid var(--green-dim);}
+  .badge-progress{color:#ffb020; border:1px solid rgba(255,176,32,0.4); background:rgba(255,176,32,0.08); padding:4px 10px; border-radius:6px;}
+  .badge-live{color:var(--green); border:1px solid rgba(57,255,20,0.4); background:rgba(57,255,20,0.08); padding:4px 10px; border-radius:6px;}
+
+  /* ---- Contact ---- */
+  .contact-wrap{text-align:center;}
+  .contact-title{font-family:'Space Grotesk',sans-serif; font-size:clamp(32px,5vw,58px); font-weight:700; margin:0 0 20px;}
+  .contact-title span{color:var(--green);}
+  .contact-sub{color:var(--text-muted); max-width:520px; margin:0 auto 40px; font-size:16px; line-height:1.7;}
+  .contact-links{display:flex; justify-content:center; gap:18px; flex-wrap:wrap;}
+  .contact-links a{
+    font-family:'JetBrains Mono', monospace; font-size:14px;
+    border:1px solid var(--line); padding:14px 24px; border-radius:10px;
+    transition:all 0.25s; display:flex; align-items:center; gap:10px;
+  }
+  .contact-links a:hover{border-color:var(--green); color:var(--green); box-shadow:0 0 24px var(--green-glow); transform:translateY(-2px);}
+
+  footer{
+    padding:30px 6vw; border-top:1px solid var(--line);
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;
+    font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--text-faint);
+  }
+
+  @media (max-width: 880px){
+    .nav-links{display:none;}
+    .hero-grid{grid-template-columns:1fr;}
+    .hero-canvas-wrap{height:340px; order:-1;}
+    .about-grid{grid-template-columns:1fr;}
+    .project-card{grid-template-columns:1fr; text-align:left;}
+    .project-status{text-align:left;}
+  }
+</style>
 </head>
-
 <body>
-    <!-- Header Section -->
-    <header>
-        <h1>Gokulavasan J</h1>
-        <p>Web Developer | Designer | FullStack Developer</p>
-        <nav>
-            <ul>
-                <li><a href="#about">About Me</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
+<div class="noise"></div>
 
-    <!-- About Section -->
-    <section id="about">
-        <h2>About Me</h2>
-        <p>Hello! I'm Gokulavasan J, a passionate web developer. I specialized in front-end development and have a keen eye for UI/UX design. My goal is to create clean, efficient, and aesthetically pleasing websites.</p>
-    </section>
+<nav>
+  <div class="logo"><span class="dot"></span>gokulavasan.dev</div>
+  <div class="nav-links">
+    <a href="#about">about</a>
+    <a href="#stack">stack</a>
+    <a href="#work">work</a>
+    <a href="#contact">contact</a>
+  </div>
+  <a class="nav-cta" href="#contact">Get in touch</a>
+</nav>
 
-    <!-- Projects Section -->
-    <section id="projects">
-        <h2>Projects</h2>
-        <p>Here are a few projects I've worked on:</p>
-        <div class="projects">
-            <div class="project"> 
-                <h3>Edge-Intelligence Driven Smart Energy Monitoring and Non-Invasive Load Analysis Framework Utilizing TinyML on ESP32 Microcontrollers.</h3>
-            <p>One thing worth double-checking with your supervisor: you clarified earlier that your project is not NILM (it doesn't identify which appliance is 
-                running — only whether the room's overall behavior looks normal or not). This title uses "Non-Invasive Load Analysis" rather than "Load Monitoring,
-                " which is a smart way to keep the "non-intrusive sensor" framing (SCT-013 clamp, no wiring into individual appliances) without implying 
-                appliance-level classification like Gopal's or the literature paper's projects do. That distinction is worth stating explicitly in your
-                abstract/introduction so evaluators don't assume you're doing appliance disaggregation.</p>
-            </div>
+<section class="hero">
+  <div class="hero-grid">
+    <div>
+      <div class="eyebrow">AVAILABLE FOR OPPORTUNITIES</div>
+      <h1 class="name">Gokulavasan<br><span>J.</span></h1>
+      <div class="role-line" id="role-line"></div>
+      <p class="hero-desc">
+        I build fast, scalable, database-driven web applications — from pixel-accurate interfaces
+        down to the REST APIs and schemas underneath them. Lately, I've also been pointing that
+        same systems-thinking at the edge, teaching microcontrollers to notice when something's wrong.
+      </p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="#work">View my work →</a>
+        <a class="btn-ghost" href="#contact">Contact me</a>
+      </div>
+    </div>
+    <div class="hero-canvas-wrap">
+      <canvas id="hero-canvas"></canvas>
+      <div class="canvas-hint">drag to rotate</div>
+    </div>
+  </div>
+  <div class="scroll-cue"><div class="line"></div>SCROLL</div>
+</section>
+
+<section id="about">
+  <div class="section-tag">01 — ABOUT</div>
+  <h2 class="section-title">Frontend-focused, full-stack capable, and increasingly curious about the edge.</h2>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>I'm a full-stack web developer who specializes in the front end — clean component architecture,
+      responsive layouts, and interfaces that feel considered rather than assembled. I pair that with
+      solid backend fundamentals: REST APIs, relational schemas, and authentication done properly.</p>
+      <p>My current focus outside of client-facing work is edge intelligence — running lightweight ML
+      models directly on microcontrollers so devices can make decisions without a round trip to the cloud.</p>
+    </div>
+    <div class="status-card">
+      <div class="row"><span class="k">building</span> E-Cart — full-stack e-commerce platform</div>
+      <div class="row"><span class="k">researching</span> TinyML anomaly detection on ESP32</div>
+      <div class="row"><span class="k">stack</span> Next.js · React · Node · Express · MySQL</div>
+      <div class="row"><span class="k">based in</span> Coimbatore, Tamil Nadu, India</div>
+    </div>
+  </div>
+</section>
+
+<section id="stack">
+  <div class="section-tag">02 — STACK</div>
+  <h2 class="section-title">What I build with, organized the way I actually use it.</h2>
+  <div class="stack">
+    <div class="stack-layer">
+      <div class="layer-label">Frontend</div>
+      <div class="layer-items">
+        <span class="chip">React</span><span class="chip">Next.js</span><span class="chip">JavaScript</span>
+        <span class="chip">HTML5</span><span class="chip">CSS3</span><span class="chip">Tailwind CSS</span>
+      </div>
+    </div>
+    <div class="stack-layer">
+      <div class="layer-label">Backend</div>
+      <div class="layer-items">
+        <span class="chip">Node.js</span><span class="chip">Express.js</span><span class="chip">REST APIs</span>
+        <span class="chip">Authentication</span>
+      </div>
+    </div>
+    <div class="stack-layer">
+      <div class="layer-label">Data</div>
+      <div class="layer-items">
+        <span class="chip">MySQL</span><span class="chip">Schema Design</span>
+      </div>
+    </div>
+    <div class="stack-layer">
+      <div class="layer-label">Tools &amp; Platforms</div>
+      <div class="layer-items">
+        <span class="chip">Git</span><span class="chip">GitHub</span><span class="chip">VS Code</span>
+        <span class="chip">Postman</span><span class="chip">Figma</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="section-tag">03 — SELECTED WORK</div>
+  <h2 class="section-title">Two projects, two very different problems.</h2>
+  <div class="projects-list">
+
+    <div class="project-card" data-tilt>
+      <div class="project-index">01</div>
+      <div class="project-main">
+        <h3>E-Cart</h3>
+        <p>A full-stack e-commerce web application with secure user authentication, product management,
+        shopping cart, wishlist, and RESTful API integration — built on a scalable client-server
+        architecture with a responsive, database-driven front end.</p>
+        <div class="project-tags">
+          <span class="tag">Next.js</span><span class="tag">React</span><span class="tag">Node.js</span>
+          <span class="tag">Express.js</span><span class="tag">MySQL</span>
         </div>
-    </section>
+      </div>
+      <div class="project-status">
+        <div class="badge-live">LIVE</div><br><br>
+        <a href="https://gokulavasan2005.github.io/E-Cart/" target="_blank" rel="noopener">View project →</a>
+      </div>
+    </div>
 
-    <!-- Skills Section -->
-    <section id="skills">
-        <h2>Skills</h2>
-        <p>These are some of the skills I specialize in:</p>
-        <div class="skills">
-            <div class="skill">
-                <img src="https://verpex.com/assets/uploads/images/blog/Basic-HTML-Codes-for-Websites.webp?v=1691760654" alt="HTML">
-                <h3>HTML</h3>
-                <p>Expert in crafting responsive web pages with clean and semantic HTML.</p>
-            </div>
-            <div class="skill">
-                <img src="https://tse4.mm.bing.net/th?id=OIP.eMkm9YE8YKM-YlCFvFDpCwHaEL&pid=Api&P=0&h=180" alt="CSS">
-                <h3>CSS</h3>
-                <p>Skilled in creating beautiful, modern, and responsive designs using CSS and frameworks like Bootstrap.</p>
-            </div>
-            <div class="skill">
-                <img src="https://www.infoworld.com/wp-content/uploads/2024/06/java_binary_code_gears_programming_coding_development_by_bluebay2014_gettyimages-1040871468_2400x1600-100795798-orig.jpg?quality=50&strip=all" alt="JavaScript">
-                <h3>JavaScript</h3>
-                <p>Proficient in creating interactive and dynamic websites with JavaScript, including frameworks like React.</p>
-            </div>
-            <div class="skill">
-                <img src="https://tse3.mm.bing.net/th?id=OIP.derccFr80GQD1PJ8C69Q2AHaEJ&pid=Api&P=0&h=180" alt="React">
-                <h3>React</h3>
-                <p>Experienced in building high-performance applications with React.js and related tools.</p>
-            </div>
+    <div class="project-card" data-tilt>
+      <div class="project-index">02</div>
+      <div class="project-main">
+        <h3>Edge-Intelligence Driven Smart Energy Monitoring</h3>
+        <p>A self-calibrating, room-personalized power anomaly monitoring framework using TinyML on
+        ESP32 microcontrollers. It learns a room's normal, non-intrusive power-usage pattern on-device
+        and alerts a warden by SMS when it detects a genuine anomaly — without identifying individual appliances.</p>
+        <div class="project-tags">
+          <span class="tag">TinyML</span><span class="tag">ESP32</span><span class="tag">Edge AI</span>
+          <span class="tag">Embedded Systems</span>
         </div>
-    </section>
+      </div>
+      <div class="project-status">
+        <div class="badge-progress">IN PROGRESS</div>
+      </div>
+    </div>
 
-    <section id="contact">
-        <h2>Contact Me</h2>
-        <p>If you'd like to get in touch, please feel free to send me an email or connect via social media:</p>
-        <p>Phone: +91 9843941947</p>
-        <p>Email: <a href="727823tuit041@skct.edu.in">727823tuit041@skct.edu.in</a></p>
-        <p>LinkedIn: <a href="https://www.linkedin.com/in/gokulavasan-j-29a819376/?skipRedirect=true" target="_blank">Linkedin.com</a></p>
-    </section>
+  </div>
+</section>
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2025 Gokulavasan J | <a href="#contact">Contact</a></p>
-    </footer>
+<section id="contact">
+  <div class="contact-wrap">
+    <div class="section-tag" style="justify-content:center;">04 — CONTACT</div>
+    <h2 class="contact-title">Let's build something<br><span>worth shipping.</span></h2>
+    <p class="contact-sub">Open to frontend and full-stack roles, freelance projects, and interesting
+    conversations about edge AI. Reach out through whichever channel is easiest.</p>
+    <div class="contact-links">
+      <a href="mailto:727823tuit041@skct.edu.in">✉ Email</a>
+      <a href="tel:+919843941947">☎ +91 98439 41947</a>
+      <a href="https://www.linkedin.com/in/gokulavasan-j-29a819376/" target="_blank" rel="noopener">in LinkedIn</a>
+      <a href="https://github.com/gokulavasan2005" target="_blank" rel="noopener">⌥ GitHub</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Gokulavasan J</span>
+  <span>Built with intent, not a template.</span>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+  // ---- Typing role line ----
+  const roles = ["Frontend Developer", "Full-Stack Web Developer", "React & Next.js Engineer", "TinyML / Edge AI Explorer"];
+  const roleEl = document.getElementById('role-line');
+  let ri = 0, ci = 0, deleting = false;
+  function typeLoop(){
+    const word = roles[ri];
+    if(!deleting){
+      ci++;
+      if(ci > word.length){ deleting = true; setTimeout(typeLoop, 1400); return; }
+    } else {
+      ci--;
+      if(ci < 0){ deleting = false; ri = (ri+1) % roles.length; ci = 0; }
+    }
+    roleEl.innerHTML = word.slice(0, ci) + '<span class="cursor">&nbsp;</span>';
+    setTimeout(typeLoop, deleting ? 45 : 85);
+  }
+  typeLoop();
+
+  // ---- 3D Hero: wireframe network sphere ----
+  (function(){
+    const canvas = document.getElementById('hero-canvas');
+    const wrap = canvas.parentElement;
+    const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+    camera.position.z = 6.2;
+
+    function resize(){
+      const w = wrap.clientWidth, h = wrap.clientHeight;
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      camera.aspect = w/h; camera.updateProjectionMatrix();
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const group = new THREE.Group();
+    scene.add(group);
+
+    // icosahedron wireframe (node network)
+    const geo = new THREE.IcosahedronGeometry(2.3, 2);
+    const wireMat = new THREE.MeshBasicMaterial({color:0x39FF14, wireframe:true, transparent:true, opacity:0.35});
+    const wireMesh = new THREE.Mesh(geo, wireMat);
+    group.add(wireMesh);
+
+    // glowing points at vertices
+    const ptsMat = new THREE.PointsMaterial({color:0x39FF14, size:0.055, transparent:true, opacity:0.95});
+    const points = new THREE.Points(geo, ptsMat);
+    group.add(points);
+
+    // inner core sphere, subtle
+    const coreGeo = new THREE.IcosahedronGeometry(1.1, 1);
+    const coreMat = new THREE.MeshBasicMaterial({color:0x39FF14, wireframe:true, transparent:true, opacity:0.18});
+    group.add(new THREE.Mesh(coreGeo, coreMat));
+
+    let targetRotX = 0, targetRotY = 0;
+    let dragging = false, lastX = 0, lastY = 0;
+    let autoRotate = true;
+
+    canvas.addEventListener('pointerdown', e => { dragging = true; autoRotate = false; lastX = e.clientX; lastY = e.clientY; });
+    window.addEventListener('pointerup', () => dragging = false);
+    window.addEventListener('pointermove', e => {
+      if(dragging){
+        targetRotY += (e.clientX - lastX) * 0.006;
+        targetRotX += (e.clientY - lastY) * 0.006;
+        lastX = e.clientX; lastY = e.clientY;
+      }
+    });
+
+    function animate(){
+      requestAnimationFrame(animate);
+      if(autoRotate){
+        targetRotY += 0.0018;
+        targetRotX = Math.sin(Date.now()*0.0002) * 0.15;
+      }
+      group.rotation.y += (targetRotY - group.rotation.y) * 0.08;
+      group.rotation.x += (targetRotX - group.rotation.x) * 0.08;
+      renderer.render(scene, camera);
+    }
+    animate();
+  })();
+
+  // ---- Subtle 3D tilt on project cards ----
+  document.querySelectorAll('[data-tilt]').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      card.style.transform = `perspective(900px) rotateY(${x*4}deg) rotateX(${-y*4}deg) translateY(-2px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(900px) rotateY(0) rotateX(0) translateY(0)';
+    });
+  });
+</script>
 </body>
-
 </html>
