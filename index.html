@@ -233,6 +233,7 @@
   .tag{font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--green); background:rgba(57,255,20,0.08); border:1px solid rgba(57,255,20,0.25); border-radius:6px; padding:4px 10px;}
   .project-status{font-family:'JetBrains Mono', monospace; font-size:12px; text-align:right;}
   .project-status a{color:var(--green); border-bottom:1px solid var(--green-dim);}
+  .project-status .project-links{display:flex; flex-direction:column; gap:6px; align-items:flex-end;}
   .badge-progress{color:#ffb020; border:1px solid rgba(255,176,32,0.4); background:rgba(255,176,32,0.08); padding:4px 10px; border-radius:6px;}
   .badge-live{color:var(--green); border:1px solid rgba(57,255,20,0.4); background:rgba(57,255,20,0.08); padding:4px 10px; border-radius:6px;}
 
@@ -262,6 +263,7 @@
     .about-grid{grid-template-columns:1fr;}
     .project-card{grid-template-columns:1fr; text-align:left;}
     .project-status{text-align:left;}
+    .project-status .project-links{align-items:flex-start;}
   }
 </style>
 </head>
@@ -333,8 +335,9 @@
     </div>
     <div class="status-card">
       <div class="row"><span class="k">building</span> E-Cart — full-stack e-commerce platform</div>
+      <div class="row"><span class="k">shipped</span> URL Shortener — Flask + PostgreSQL, deployed</div>
       <div class="row"><span class="k">researching</span> TinyML anomaly detection on ESP32</div>
-      <div class="row"><span class="k">stack</span> Next.js · React · Node · Express · MySQL</div>
+      <div class="row"><span class="k">stack</span> Next.js · React · Node · Express · Flask · MySQL · PostgreSQL</div>
       <div class="row"><span class="k">based in</span> Coimbatore, Tamil Nadu, India</div>
     </div>
   </div>
@@ -354,21 +357,21 @@
     <div class="stack-layer">
       <div class="layer-label">Backend</div>
       <div class="layer-items">
-        <span class="chip">Node.js</span><span class="chip">Express.js</span><span class="chip">REST APIs</span>
-        <span class="chip">Authentication</span>
+        <span class="chip">Node.js</span><span class="chip">Express.js</span><span class="chip">Flask</span>
+        <span class="chip">REST APIs</span><span class="chip">Authentication</span><span class="chip">Gunicorn</span>
       </div>
     </div>
     <div class="stack-layer">
       <div class="layer-label">Data</div>
       <div class="layer-items">
-        <span class="chip">MySQL</span><span class="chip">Schema Design</span>
+        <span class="chip">MySQL</span><span class="chip">PostgreSQL</span><span class="chip">SQLite</span><span class="chip">Schema Design</span>
       </div>
     </div>
     <div class="stack-layer">
       <div class="layer-label">Tools &amp; Platforms</div>
       <div class="layer-items">
         <span class="chip">Git</span><span class="chip">GitHub</span><span class="chip">VS Code</span>
-        <span class="chip">Postman</span><span class="chip">Figma</span>
+        <span class="chip">Postman</span><span class="chip">Figma</span><span class="chip">Render</span><span class="chip">Vercel</span>
       </div>
     </div>
   </div>
@@ -376,7 +379,7 @@
 
 <section id="work">
   <div class="section-tag">03 — SELECTED WORK</div>
-  <h2 class="section-title">Two projects, two very different problems.</h2>
+  <h2 class="section-title">Three projects, three very different problems.</h2>
   <div class="projects-list">
 
     <div class="project-card" data-tilt>
@@ -399,6 +402,28 @@
 
     <div class="project-card" data-tilt>
       <div class="project-index">02</div>
+      <div class="project-main">
+        <h3>URL Shortener</h3>
+        <p>A full-featured URL shortener built with Flask, backed by PostgreSQL in production
+        (with a SQLite fallback for local dev). Supports custom aliases, link expiration, click
+        analytics with Chart.js graphs, downloadable QR codes, and per-IP rate limiting — served
+        via Gunicorn.</p>
+        <div class="project-tags">
+          <span class="tag">Flask</span><span class="tag">PostgreSQL</span><span class="tag">SQLite</span>
+          <span class="tag">Gunicorn</span><span class="tag">Chart.js</span>
+        </div>
+      </div>
+      <div class="project-status">
+        <div class="badge-live">LIVE</div><br><br>
+        <div class="project-links">
+          <a href="https://u-rl-shortener.vercel.app" target="_blank" rel="noopener">View project →</a>
+          <a href="https://github.com/gokulavasan2005/URl_Shortener" target="_blank" rel="noopener">Source →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card" data-tilt>
+      <div class="project-index">03</div>
       <div class="project-main">
         <h3>Edge-Intelligence Driven Smart Energy Monitoring</h3>
         <p>A self-calibrating, room-personalized power anomaly monitoring framework using TinyML on
